@@ -3,6 +3,9 @@ package com.dapathy.togglemaps;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +16,9 @@ import android.widget.TextView;
 import com.topjohnwu.superuser.Shell;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void createShortCut() throws PackageManager.NameNotFoundException {
-		// TODO:
+		Drawable icon = this.getPackageManager().getApplicationIcon(Package_Name);
+		ShortcutInfoCompat shortcutInfo = new ShortcutInfoCompat.Builder(this, "test")
+				.setIntent(this.getPackageManager().getLaunchIntentForPackage(Package_Name).setAction(Intent.ACTION_MAIN))
+				.setShortLabel("Maps")
+				.setIcon(IconCompat.createWithBitmap(getBitmapFromDrawable(icon)))
+				.build();
+		ShortcutManagerCompat.requestPinShortcut(this, shortcutInfo, null);
+	}
+
+	static private Bitmap getBitmapFromDrawable(Drawable drawable) {
+		final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+		final Canvas canvas = new Canvas(bmp);
+		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+		drawable.draw(canvas);
+		return bmp;
 	}
 }
