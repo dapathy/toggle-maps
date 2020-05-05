@@ -4,6 +4,6 @@ public final class Constants {
 	public static final String Maps_Package_Name = "com.google.android.apps.maps";
 
 	// Settings:
-	public static final String Shortcut_Setting_Name = "create_shortcut_setting";
-	public static final String Toggle_Automatically_Setting_Name = "toggle_automatically";
+	public static final String Shortcut_Preference_Name = "create_shortcut";
+	public static final String Toggle_Automatically_Preference_Name = "toggle_automatically";
 }

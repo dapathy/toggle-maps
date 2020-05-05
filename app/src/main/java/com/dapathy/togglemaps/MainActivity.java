@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 		if (!status) {
 			SharedPreferences sharedPreferences =
 					PreferenceManager.getDefaultSharedPreferences(this);
-			if (sharedPreferences.getBoolean(Constants.Shortcut_Setting_Name, false)) {
+			if (sharedPreferences.getBoolean(Constants.Shortcut_Preference_Name, false)) {
 				createShortCut();
 			}
 		}

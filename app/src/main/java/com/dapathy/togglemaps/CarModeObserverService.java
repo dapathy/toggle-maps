@@ -52,7 +52,7 @@ public class CarModeObserverService extends IntentService {
 		private boolean isEnabled(Context context) {
 			SharedPreferences sharedPreferences =
 					PreferenceManager.getDefaultSharedPreferences(context);
-			return sharedPreferences.getBoolean(Constants.Toggle_Automatically_Setting_Name, false);
+			return sharedPreferences.getBoolean(Constants.Toggle_Automatically_Preference_Name, false);
 		}
 	}
 }

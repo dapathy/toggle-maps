@@ -1,5 +1,8 @@
 package com.dapathy.togglemaps;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -22,10 +25,37 @@ public class SettingsActivity extends AppCompatActivity {
 		}
 	}
 
-	public static class SettingsFragment extends PreferenceFragmentCompat {
+	public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 		@Override
 		public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 			setPreferencesFromResource(R.xml.preferences, rootKey);
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+			getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		}
+
+		@Override
+		public void onPause() {
+			super.onPause();
+			getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			switch (key) {
+				case Constants.Toggle_Automatically_Preference_Name:
+					boolean isEnabling = sharedPreferences.getBoolean(Constants.Toggle_Automatically_Preference_Name, false);
+					Intent serviceIntent = new Intent(this.getContext(), CarModeObserverService.class);
+					if (isEnabling) {
+						this.getContext().startService(serviceIntent);
+					} else {
+						this.getContext().stopService(serviceIntent);
+					}
+					break;
+			}
 		}
 	}
 }
