@@ -5,4 +5,5 @@ public final class Constants {
 
 	// Settings:
 	public static final String Shortcut_Setting_Name = "create_shortcut_setting";
+	public static final String Toggle_Automatically_Setting_Name = "toggle_automatically";
 }

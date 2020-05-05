@@ -7,4 +7,10 @@
         app:summary="@string/create_shortcut_summary"
         app:title="@string/create_shortcut_title" />
 
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:key="toggle_automatically"
+        app:summary="@string/toggle_automatically_summary"
+        app:title="@string/toggle_automatically_title" />
+
 </PreferenceScreen>

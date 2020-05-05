@@ -7,6 +7,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 
 /**
@@ -37,12 +40,19 @@ public class CarModeObserverService extends IntentService {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Package maps = new Package(context, Constants.Maps_Package_Name);
+			if (!isEnabled(context)) return;
 
 			if (intent.getAction().equals(UiModeManager.ACTION_ENTER_CAR_MODE)) {
 				maps.toggle(false);
 			} else if (intent.getAction().equals(UiModeManager.ACTION_EXIT_CAR_MODE)) {
 				maps.toggle(true);
 			}
+		}
+
+		private boolean isEnabled(Context context) {
+			SharedPreferences sharedPreferences =
+					PreferenceManager.getDefaultSharedPreferences(context);
+			return sharedPreferences.getBoolean(Constants.Toggle_Automatically_Setting_Name, false);
 		}
 	}
 }

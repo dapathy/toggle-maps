@@ -2,6 +2,8 @@
     <string name="app_name">Toggle Maps</string>
     <string name="create_shortcut_title">Create shortcut</string>
     <string name="create_shortcut_summary">Create a launcher shortcut when the app is toggled to the Enabled status.</string>
+    <string name="toggle_automatically_summary">Automatically toggle Maps when Android Auto starts and exits.</string>
+    <string name="toggle_automatically_title">Automatically toggle</string>
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
 </resources>
