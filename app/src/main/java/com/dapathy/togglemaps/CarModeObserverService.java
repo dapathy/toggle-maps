@@ -25,15 +25,24 @@ public class CarModeObserverService extends IntentService {
 
 		// empty notification to keep service running.
 		startForeground(0, new Notification());
-		
-		registerReceiver(new CarModeReceiver(), new IntentFilter(UiModeManager.ACTION_ENTER_CAR_MODE));
+
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(UiModeManager.ACTION_ENTER_CAR_MODE);
+		intentFilter.addAction(UiModeManager.ACTION_EXIT_CAR_MODE);
+		registerReceiver(new CarModeReceiver(), intentFilter);
 	}
 
 	private class CarModeReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			Package maps = new Package(context, Constants.Maps_Package_Name);
 
+			if (intent.getAction().equals(UiModeManager.ACTION_ENTER_CAR_MODE)) {
+				maps.toggle(false);
+			} else if (intent.getAction().equals(UiModeManager.ACTION_EXIT_CAR_MODE)) {
+				maps.toggle(true);
+			}
 		}
 	}
 }
