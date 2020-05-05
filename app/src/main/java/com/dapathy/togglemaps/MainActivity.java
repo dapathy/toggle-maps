@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.topjohnwu.superuser.Shell;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -22,14 +20,16 @@ import androidx.core.graphics.drawable.IconCompat;
 import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
-	private final static String Package_Name = "com.google.android.apps.maps";
+	private Package mapsPackage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 		try {
-			setStatusTextView(getPackageStatus());
+			this.mapsPackage = new Package(this, Constants.Maps_Package_Name);
+			setStatusTextView(this.mapsPackage.getStatus());
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -54,23 +54,18 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void onToggleMapsClick(View view) throws PackageManager.NameNotFoundException {
-		boolean status = getPackageStatus();
-		togglePackage(status);
+		boolean status = this.mapsPackage.getStatus();
+		this.mapsPackage.toggle(status);
 		setStatusTextView(!status);
 
 		// create shortcut if enabling package and setting is enabled
 		if (!status) {
 			SharedPreferences sharedPreferences =
 					PreferenceManager.getDefaultSharedPreferences(this);
-			if (sharedPreferences.getBoolean("create_shortcut_setting", false)) {
+			if (sharedPreferences.getBoolean(Constants.Shortcut_Setting_Name, false)) {
 				createShortCut();
 			}
 		}
-	}
-
-	private void togglePackage(boolean status) {
-		String command = status ? "disable" : "enable";
-		Shell.su(String.format("pm %s %s", command, Package_Name)).exec();
 	}
 
 	private void setStatusTextView(boolean status) {
@@ -79,14 +74,10 @@ public class MainActivity extends AppCompatActivity {
 		textView.setText(String.format("Maps is %s", statusText));
 	}
 
-	private boolean getPackageStatus() throws PackageManager.NameNotFoundException {
-		return this.getPackageManager().getApplicationInfo(Package_Name, 0).enabled;
-	}
-
 	private void createShortCut() throws PackageManager.NameNotFoundException {
-		Drawable icon = this.getPackageManager().getApplicationIcon(Package_Name);
+		Drawable icon = this.getPackageManager().getApplicationIcon(Constants.Maps_Package_Name);
 		ShortcutInfoCompat shortcutInfo = new ShortcutInfoCompat.Builder(this, "test")
-				.setIntent(this.getPackageManager().getLaunchIntentForPackage(Package_Name).setAction(Intent.ACTION_MAIN))
+				.setIntent(this.getPackageManager().getLaunchIntentForPackage(Constants.Maps_Package_Name).setAction(Intent.ACTION_MAIN))
 				.setShortLabel("Maps")
 				.setIcon(IconCompat.createWithBitmap(getBitmapFromDrawable(icon)))
 				.build();
