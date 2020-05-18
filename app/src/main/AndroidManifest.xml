@@ -35,8 +35,9 @@
         </receiver>
 
         <service
-            android:name=".CarModeObserverService"
-            android:exported="false" />
+            android:name=".CheckCarModeJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />

@@ -11,16 +11,10 @@ public class OnBootReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// don't start service is not enabled.
+		// don't start service if not enabled.
 		boolean isEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.Toggle_Automatically_Preference_Name, false);
 		if (!isEnabled) return;
 
-		Intent serviceIntent = new Intent(context, CarModeObserverService.class);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			context.startForegroundService(serviceIntent);
-		} else {
-			context.startService(serviceIntent);
-		}
+		CheckCarModeJobService.schedule(context);
 	}
 }

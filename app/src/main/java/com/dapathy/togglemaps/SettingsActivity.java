@@ -48,11 +48,10 @@ public class SettingsActivity extends AppCompatActivity {
 			switch (key) {
 				case Constants.Toggle_Automatically_Preference_Name:
 					boolean isEnabling = sharedPreferences.getBoolean(Constants.Toggle_Automatically_Preference_Name, false);
-					Intent serviceIntent = new Intent(this.getContext(), CarModeObserverService.class);
 					if (isEnabling) {
-						this.getContext().startService(serviceIntent);
+						CheckCarModeJobService.schedule(this.getContext());
 					} else {
-						this.getContext().stopService(serviceIntent);
+						CheckCarModeJobService.cancel(this.getContext());
 					}
 					break;
 			}
